@@ -1,0 +1,11 @@
+.profile__edit-button {
+  display: block;
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 768px) {
+  .profile__edit-button {
+    grid-column-start: 3;
+    grid-row-start: 1;
+  }
+}
