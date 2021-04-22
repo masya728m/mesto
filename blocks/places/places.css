@@ -1,5 +1,5 @@
 .places {
-  margin: 0 auto;
+  margin: 61px auto 0;
   display: grid;
   grid-column-gap: 17px;
   grid-auto-rows: auto;
