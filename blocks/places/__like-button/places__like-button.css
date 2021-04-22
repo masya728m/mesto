@@ -1,0 +1,15 @@
+.places__like-button {
+  background-image: url("../../../images/like-button-disabled.svg");
+  background-size: cover;
+  display: block;
+  width: 22px;
+  height: 19px;
+}
+
+.places__like-button:hover {
+  background-image: url("../../../images/like-button-hover.svg");
+}
+
+.places__like-button:active {
+  background-image: url("../../../images/like-button-active.svg");
+}

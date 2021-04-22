@@ -12,3 +12,11 @@
 @import url('../blocks/profile/__edit-button/profile__edit-button.css');
 @import url('../blocks/profile/__info/profile__info.css');
 @import url('../blocks/profile/__name/profile__name.css');
+
+/* places */
+@import url('../blocks/places/places.css');
+@import url('../blocks/places/__name/places__name.css');
+@import url('../blocks/places/__info/places__info.css');
+@import url('../blocks/places/__image/places__image.css');
+@import url('../blocks/places/__place/places__place.css');
+@import url('../blocks/places/__like-button/places__like-button.css');
