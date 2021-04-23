@@ -1,0 +1,20 @@
+.popup__field {
+  margin: 54px auto 0;
+  height: 27px;
+  border-bottom: 1px solid black;
+  font-size: 14px;
+  line-height: 17px;
+  width: 100%;
+  max-width: 358px;
+}
+
+.popup__field:last-child {
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 768px){
+  .popup__field {
+    margin: 75px auto 0;
+    max-width: 238px;
+  }
+}
