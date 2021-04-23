@@ -9,13 +9,15 @@
 </head>
 <body class="page">
 <div class="popup">
-  <div class="popup__container">
+  <form class="popup__container">
     <img class="popup__exit-button" src="images/close-icon.svg" alt="close"/>
     <h2 class="popup__title"> Редактировать профиль </h2>
-    <form class="popup__field"> Введитя имя</form>
-    <form class="popup__field"> Введите должность</form>
-    <div class="popup__submit-button"> Сохранить</div>
-  </div>
+    <fieldset class="popup__input-container">
+      <input type="text" name="name" class="popup__field"/>
+      <input type="text" name="job" class="popup__field"/>
+    </fieldset>
+    <input type="submit" value="Сохранить" class="popup__submit-button"/>
+  </form>
 </div>
 <header class="header">
   <img class="header__logo" src="./images/logo.svg" alt="logo"/>
@@ -79,5 +81,6 @@
     <h2 class="footer__copyright"> &copy; 2021 Марина Медведчук </h2>
   </footer>
 </main>
+<script src="scripts/index.js"></script>
 </body>
 </html>
