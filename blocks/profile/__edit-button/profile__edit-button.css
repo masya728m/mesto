@@ -5,6 +5,10 @@
   max-height: 24px;
 }
 
+.profile__edit-button:hover {
+  opacity: 0.6;
+}
+
 @media screen and (max-width: 768px) {
   .profile__edit-button {
     grid-column-start: 3;
