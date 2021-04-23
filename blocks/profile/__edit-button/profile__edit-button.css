@@ -1,11 +1,15 @@
 .profile__edit-button {
   display: block;
   align-self: flex-end;
+  max-width: 24px;
+  max-height: 24px;
 }
 
 @media screen and (max-width: 768px) {
   .profile__edit-button {
     grid-column-start: 3;
     grid-row-start: 1;
+    max-width: 18px;
+    max-height: 18px;
   }
 }
