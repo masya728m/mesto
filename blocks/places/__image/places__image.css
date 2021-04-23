@@ -17,3 +17,9 @@
     max-height: calc(282 * calc(100vw / 768));
   }
 }
+
+@media screen  and (max-width: 425px) {
+  .places__image {
+    max-height: 282px;
+  }
+}
