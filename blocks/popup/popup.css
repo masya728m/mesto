@@ -6,6 +6,9 @@
   top: 0;
   align-items: center;
   z-index: 2;
+  text-align: center;
+  justify-content: space-around;
+  max-width: 1280px;
 }
 
 .popup::after {
