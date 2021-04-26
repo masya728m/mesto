@@ -1,8 +1,16 @@
 .profile__edit-button {
   display: block;
   align-self: flex-end;
-  max-width: 24px;
-  max-height: 24px;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  background-image: url("../../../images/edit-button.svg");
+  background-size: 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid white;
 }
 
 .profile__edit-button:hover {
@@ -13,7 +21,7 @@
   .profile__edit-button {
     grid-column-start: 3;
     grid-row-start: 1;
-    max-width: 18px;
-    max-height: 18px;
+    width: 18px;
+    height: 18px;
   }
 }

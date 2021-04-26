@@ -9,15 +9,18 @@
 </head>
 <body class="page">
 <div class="popup">
-  <form class="popup__container">
-    <img class="popup__exit-button" src="images/close-icon.svg" alt="close"/>
-    <h2 class="popup__title"> Редактировать профиль </h2>
-    <fieldset class="popup__input-container">
-      <input type="text" name="name" class="popup__field"/>
-      <input type="text" name="job" class="popup__field"/>
-    </fieldset>
-    <input type="submit" value="Сохранить" class="popup__submit-button"/>
-  </form>
+  <div class="popup__container">
+    <form class="popup__form" name="popup__window">
+      <button class="popup__exit-button">
+      </button>
+      <h2 class="popup__title"> Редактировать профиль </h2>
+      <fieldset class="popup__input-container">
+        <input type="text" name="name" class="popup__field"/>
+        <input type="text" name="job" class="popup__field"/>
+      </fieldset>
+      <button type="submit" class="popup__submit-button"> Сохранить</button>
+    </form>
+  </div>
 </div>
 <header class="header">
   <img class="header__logo" src="./images/logo.svg" alt="logo"/>
@@ -27,10 +30,11 @@
     <img class="profile__avatar" src="images/zhak.jpg" alt="barrack obama"/>
     <div class="profile__info">
       <h1 class="profile__name"> Жак-Ив Кусто </h1>
-      <img class="profile__edit-button" src="images/edit-button.svg" alt="edit button"/>
+      <button class="profile__edit-button" type="button">
+      </button>
       <h2 class="profile__description"> Исследователь океана </h2>
     </div>
-    <div class="profile__add-button"></div>
+    <button class="profile__add-button"></button>
   </section>
 
   <section class="places">
@@ -38,42 +42,42 @@
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button"></button>
       </div>
     </div>
     <div class="places__place">
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button" type="button"></button>
       </div>
     </div>
     <div class="places__place">
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button"></button>
       </div>
     </div>
     <div class="places__place">
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button" type="button"></button>
       </div>
     </div>
     <div class="places__place">
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button"></button>
       </div>
     </div>
     <div class="places__place">
       <img class="places__image" src="images/japan.jpg" alt="japan">
       <div class="places__info">
         <h2 class="places__name"> Япония </h2>
-        <div class="places__like-button"></div>
+        <button class="places__like-button" type="button"></button>
       </div>
     </div>
   </section>

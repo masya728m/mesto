@@ -4,12 +4,19 @@
   display: block;
   width: 22px;
   height: 19px;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  margin-top: 25px;
+  margin-bottom: 31px;
+  margin-right: 0;
 }
 
 .places__like-button:hover {
-  background-image: url("../../../images/like-button-hover.svg");
+  opacity: 0.5;
 }
 
 .places__like-button:active {
+  opacity: 1;
   background-image: url("../../../images/like-button-active.svg");
 }

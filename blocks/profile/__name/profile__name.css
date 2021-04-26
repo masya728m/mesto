@@ -1,12 +1,11 @@
 .profile__name {
-  display: inline-block;
   margin: 0;
   padding: 0;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  font-weight: 400;
+  font-weight: normal;
 }
 
 

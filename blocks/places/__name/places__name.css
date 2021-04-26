@@ -1,5 +1,7 @@
 .places__name {
-  margin: 0;
+  margin-top: 25px;
+  margin-bottom: 31px;
+  margin-left: 0;
   padding: 0;
   display: block;
   text-overflow: ellipsis;
