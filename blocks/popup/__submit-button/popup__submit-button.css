@@ -7,7 +7,7 @@
   justify-content: space-evenly;
   align-items: center;
   border-radius: 2px;
-  border-color: black;
+  border: 0;
   margin: 48px auto 37px;
   width: 100%;
   max-width: 358px;
@@ -23,5 +23,6 @@
     margin-top: 45px;
     margin-bottom: 25px;
     max-width: 238px;
+    height: 46px;
   }
 }
