@@ -10,6 +10,7 @@
   margin-top: 25px;
   margin-bottom: 31px;
   margin-right: 0;
+  cursor: pointer;
 }
 
 .places__like-button:hover {

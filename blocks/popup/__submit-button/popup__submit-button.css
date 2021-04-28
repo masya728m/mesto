@@ -12,6 +12,7 @@
   width: 100%;
   max-width: 358px;
   outline: none;
+  cursor: pointer;
 }
 
 .popup__submit-button:hover {

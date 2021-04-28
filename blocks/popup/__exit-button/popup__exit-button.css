@@ -8,6 +8,7 @@
   background-size: 60px;
   background-position: center;
   top: -40px;
+  cursor: pointer;
 }
 
 .popup__exit-button:hover {
