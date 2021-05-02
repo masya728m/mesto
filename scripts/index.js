@@ -60,9 +60,14 @@ function addCard(card) {
   likeButton.classList.add('places__like-button');
   likeButton.setAttribute('type', 'button');
 
+  let deleteButton = document.createElement('button');
+  deleteButton.classList.add('places__delete-button');
+  deleteButton.setAttribute('type', 'button');
+  deleteButton.addEventListener('click', event => place.remove());
+
   let placeInfo = document.createElement('div');
   placeInfo.classList.add('places__info');
-  placeInfo.append(placeName, likeButton);
+  placeInfo.append(placeName, likeButton, deleteButton);
 
   let place = document.createElement('div');
   place.classList.add('places__place');
