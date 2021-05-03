@@ -100,14 +100,20 @@ function inputCLickHandler(event) {
   event.target.removeEventListener('input', inputCLickHandler);
 }
 
+function clearInputFormValue(inputForm) {
+  inputForm.value = '';
+}
+
 function addButtonCLickHandler(event) {
   popupState = PopupState.ADD_FORM;
   popupEditForm.classList.add('popup_opened');
   firstInputField.setAttribute('name', 'name');
   firstInputField.setAttribute('placeholder', 'Название');
+  clearInputFormValue(firstInputField);
   firstInputField.required = true;
   secondInputField.setAttribute('name', 'link');
   secondInputField.setAttribute('placeholder', 'Ссылка на картинку');
+  clearInputFormValue(secondInputField);
   secondInputField.required = true;
   firstInputField.style.opacity = '0.2';
   firstInputField.style.borderBottom = '1px solid black';
@@ -122,6 +128,8 @@ function addButtonCLickHandler(event) {
 addButton.addEventListener('click', addButtonCLickHandler);
 
 function editButtonCLickHandler(event) {
+  firstInputField.style = popupFieldStyle;
+  secondInputField.style = popupFieldStyle;
   popupState = PopupState.EDIT_FORM;
   popupEditForm.classList.add('popup_opened');
   firstInputField.value = profileName.textContent;
@@ -139,8 +147,6 @@ editButton.addEventListener('click', editButtonCLickHandler);
 function popupCloseButtonClickHandler(event) {
   popupEditForm.classList.remove('popup_opened');
   popupState = PopupState.CLOSED;
-  firstInputField.value = '';
-  secondInputField.value = '';
 }
 
 closeButton.addEventListener('click', popupCloseButtonClickHandler);
