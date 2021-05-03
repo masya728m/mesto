@@ -59,6 +59,8 @@ function addCard(card) {
   let likeButton = document.createElement('button');
   likeButton.classList.add('places__like-button');
   likeButton.setAttribute('type', 'button');
+  likeButton.addEventListener('click',
+    event => event.target.classList.toggle('places__like-button_liked'));
 
   let deleteButton = document.createElement('button');
   deleteButton.classList.add('places__delete-button');

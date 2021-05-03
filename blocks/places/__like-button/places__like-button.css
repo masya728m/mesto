@@ -16,8 +16,3 @@
 .places__like-button:hover {
   opacity: 0.5;
 }
-
-.places__like-button:active {
-  opacity: 1;
-  background-image: url("../../../images/like-button-active.svg");
-}
