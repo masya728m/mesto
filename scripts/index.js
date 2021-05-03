@@ -83,24 +83,26 @@ function fillCards(cards) {
 fillCards(initialCards);
 
 function inputCLickHandler(event) {
-  event.target.value = '';
   event.target.style.opacity = '1';
   event.target.style.borderBottom = '1px solid rgba(0, 0, 0, 0.2)';
+  event.target.removeEventListener('input', inputCLickHandler);
 }
 
 function addButtonCLickHandler(event) {
   popupState = PopupState.ADD_FORM;
   popup.classList.add('popup_opened');
   firstInputField.setAttribute('name', 'name');
+  firstInputField.setAttribute('placeholder', 'Название');
+  firstInputField.required = true;
   secondInputField.setAttribute('name', 'link');
-  firstInputField.value = 'Название';
+  secondInputField.setAttribute('placeholder', 'Ссылка на картинку');
+  secondInputField.required = true;
   firstInputField.style.opacity = '0.2';
   firstInputField.style.borderBottom = '1px solid black';
-  secondInputField.value = 'Ссылка на картинку';
   secondInputField.style.opacity = '0.2';
   secondInputField.style.borderBottom = '1px solid black';
-  firstInputField.addEventListener('click', inputCLickHandler);
-  secondInputField.addEventListener('click', inputCLickHandler);
+  firstInputField.addEventListener('input', inputCLickHandler);
+  secondInputField.addEventListener('input', inputCLickHandler);
   popup.querySelector('.popup__title').textContent = 'Новое место';
   popup.querySelector('.popup__submit-button').textContent = 'Создать';
 }
@@ -112,8 +114,10 @@ function editButtonCLickHandler(event) {
   popup.classList.add('popup_opened');
   firstInputField.value = profileName.textContent;
   firstInputField.setAttribute('name', 'name');
+  firstInputField.required = true;
   secondInputField.value = profileJob.textContent;
   secondInputField.setAttribute('name', 'job');
+  secondInputField.required = true;
   popup.querySelector('.popup__title').textContent = 'Редактировать профиль';
   popup.querySelector('.popup__submit-button').textContent = 'Сохранить';
 }
@@ -137,8 +141,6 @@ function formSubmitButtonClickHandler(event) {
       profileJob.textContent = secondInputField.value;
       break;
     case PopupState.ADD_FORM:
-      firstInputField.removeEventListener('click', inputCLickHandler);
-      secondInputField.removeEventListener('click', inputCLickHandler);
       addCard({name: firstInputField.value, link: secondInputField.value});
       break;
     default:
@@ -146,6 +148,8 @@ function formSubmitButtonClickHandler(event) {
   }
   firstInputField.style = popupFieldStyle;
   secondInputField.style = popupFieldStyle;
+  firstInputField.value = '';
+  secondInputField.value = '';
   popup.classList.remove('popup_opened');
 }
 
