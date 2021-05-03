@@ -1,5 +1,6 @@
 const editButton = document.querySelector('.profile__edit-button');
-const popup = document.querySelector('.popup');
+const popupEditForm = document.querySelectorAll('.popup')[0];
+const popupImageOverview = document.querySelectorAll('.popup')[1];
 const formElement = document.querySelector('.popup__container');
 const firstInputField = formElement.querySelectorAll('.popup__field')[0];
 const secondInputField = formElement.querySelectorAll('.popup__field')[1];
@@ -51,6 +52,15 @@ function addCard(card) {
   placeImage.classList.add('places__image');
   placeImage.setAttribute('src', card.link);
   placeImage.setAttribute('alt', card.name);
+  placeImage.addEventListener('click', event => {
+    popupImageOverview.classList.add('popup_opened');
+    const popupImage = popupImageOverview.querySelector('.popup__overview-image')
+    popupImage.setAttribute('src', event.target.getAttribute('src'));
+    const popupText = popupImageOverview.querySelector('.popup__overview-text');
+    popupText.textContent = card.name;
+    const popupExitButton = popupImageOverview.querySelector('.popup__exit-button');
+    popupExitButton.addEventListener('click', event => popupImageOverview.classList.remove('popup_opened'));
+  });
 
   let placeName = document.createElement('h2');
   placeName.classList.add('places__name');
@@ -92,7 +102,7 @@ function inputCLickHandler(event) {
 
 function addButtonCLickHandler(event) {
   popupState = PopupState.ADD_FORM;
-  popup.classList.add('popup_opened');
+  popupEditForm.classList.add('popup_opened');
   firstInputField.setAttribute('name', 'name');
   firstInputField.setAttribute('placeholder', 'Название');
   firstInputField.required = true;
@@ -105,29 +115,29 @@ function addButtonCLickHandler(event) {
   secondInputField.style.borderBottom = '1px solid black';
   firstInputField.addEventListener('input', inputCLickHandler);
   secondInputField.addEventListener('input', inputCLickHandler);
-  popup.querySelector('.popup__title').textContent = 'Новое место';
-  popup.querySelector('.popup__submit-button').textContent = 'Создать';
+  popupEditForm.querySelector('.popup__title').textContent = 'Новое место';
+  popupEditForm.querySelector('.popup__submit-button').textContent = 'Создать';
 }
 
 addButton.addEventListener('click', addButtonCLickHandler);
 
 function editButtonCLickHandler(event) {
   popupState = PopupState.EDIT_FORM;
-  popup.classList.add('popup_opened');
+  popupEditForm.classList.add('popup_opened');
   firstInputField.value = profileName.textContent;
   firstInputField.setAttribute('name', 'name');
   firstInputField.required = true;
   secondInputField.value = profileJob.textContent;
   secondInputField.setAttribute('name', 'job');
   secondInputField.required = true;
-  popup.querySelector('.popup__title').textContent = 'Редактировать профиль';
-  popup.querySelector('.popup__submit-button').textContent = 'Сохранить';
+  popupEditForm.querySelector('.popup__title').textContent = 'Редактировать профиль';
+  popupEditForm.querySelector('.popup__submit-button').textContent = 'Сохранить';
 }
 
 editButton.addEventListener('click', editButtonCLickHandler);
 
 function popupCloseButtonClickHandler(event) {
-  popup.classList.remove('popup_opened');
+  popupEditForm.classList.remove('popup_opened');
   popupState = PopupState.CLOSED;
   firstInputField.value = '';
   secondInputField.value = '';
@@ -152,7 +162,7 @@ function formSubmitButtonClickHandler(event) {
   secondInputField.style = popupFieldStyle;
   firstInputField.value = '';
   secondInputField.value = '';
-  popup.classList.remove('popup_opened');
+  popupEditForm.classList.remove('popup_opened');
 }
 
 formElement.addEventListener('submit', formSubmitButtonClickHandler);

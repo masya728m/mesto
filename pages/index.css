@@ -42,3 +42,6 @@
 @import url('../blocks/popup/__input-container/popup__input-container.css');
 @import url('../blocks/popup/__submit-button/popup__submit-button.css');
 @import url('../blocks/popup/__exit-button/popup__exit-button.css');
+@import url('../blocks/popup/__overview-conatiner/popup__overview-container.css');
+@import url('../blocks/popup/__overview-image/popup__overview-image.css');
+@import url('../blocks/popup/__overview-text/popup__overview-text.css');
