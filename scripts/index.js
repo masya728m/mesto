@@ -3,6 +3,15 @@ import {initialCards} from './initial-cards.js';
 const profile = document.querySelector('.profile');
 const popupProfile = document.querySelector('.popup_type_profile');
 const profileEditButton = document.querySelector('.profile__edit-button');
+const popupCardAdd = document.querySelector('.popup_type_card-add');
+const profileAddButton = document.querySelector('.profile__add-button');
+const popupImageOverview = document.querySelector('.popup_type_overview');
+const places = document.querySelector('.places');
+const popupImageOverviewExitButton = popupImageOverview.querySelector('.popup__exit-button');
+const popupCardAddSubmitForm = popupCardAdd.querySelector('.popup__form');
+const popupProfileSubmitForm = popupProfile.querySelector('.popup__form');
+const popupCardAddExitButton = popupCardAdd.querySelector('.popup__exit-button');
+const popupProfileExitButton = popupProfile.querySelector('.popup__exit-button');
 
 const fieldNameMap = {
   'name': profile.querySelector('.profile__name'),
@@ -17,11 +26,11 @@ function openPopup(popupWindow) {
   popupWindow.classList.add('popup_opened');
 }
 
-popupProfile.querySelector('.popup__exit-button').addEventListener('click', () => {
+popupProfileExitButton.addEventListener('click', () => {
   closePopup(popupProfile);
 });
 
-popupProfile.querySelector('.popup__submit-button').addEventListener('click', e => {
+popupProfileSubmitForm.addEventListener('submit', e => {
   e.preventDefault();
   popupProfile.querySelectorAll('.popup__field').forEach(field => {
     fieldNameMap[field.name].textContent = field.value;
@@ -36,9 +45,6 @@ profileEditButton.addEventListener('click', () => {
   });
 });
 
-const popupCardAdd = document.querySelector('.popup_type_card-add');
-
-const profileAddButton = document.querySelector('.profile__add-button');
 profileAddButton.addEventListener('click', () => {
   popupCardAdd.querySelectorAll('.popup__field').forEach(
     field => {
@@ -48,7 +54,6 @@ profileAddButton.addEventListener('click', () => {
   openPopup(popupCardAdd);
 });
 
-const popupCardAddExitButton = popupCardAdd.querySelector('.popup__exit-button');
 popupCardAddExitButton.addEventListener('click', () => closePopup(popupCardAdd));
 
 popupCardAdd.querySelectorAll('.popup__field').forEach(
@@ -56,11 +61,10 @@ popupCardAdd.querySelectorAll('.popup__field').forEach(
     field.classList.remove('popup__field_inactive');
   }));
 
-const popupCardAddSubmitButton = popupCardAdd.querySelector('.popup__submit-button');
-popupCardAddSubmitButton.addEventListener('click', event => {
+popupCardAddSubmitForm.addEventListener('submit', event => {
   event.preventDefault();
-  let placeName = popupCardAdd.querySelectorAll('.popup__field')[0].value;
-  let imageLink = popupCardAdd.querySelectorAll('.popup__field')[1].value;
+  const placeName = popupCardAdd.querySelector('.popup__field_type_place-name').value;
+  const imageLink = popupCardAdd.querySelector('.popup__field_type_image-link').value;
   const cardElement = createCardElement({
     name: placeName,
     link: imageLink
@@ -69,12 +73,7 @@ popupCardAddSubmitButton.addEventListener('click', event => {
   closePopup(popupCardAdd);
 });
 
-const popupImageOverview = document.querySelector('.popup_type_overview');
-const places = document.querySelector('.places');
-const popupImageOverviewExitButton = popupImageOverview.querySelector('.popup__exit-button');
-
-popupImageOverviewExitButton.addEventListener('click', () =>
-  popupImageOverview.classList.remove('popup_opened'));
+popupImageOverviewExitButton.addEventListener('click', () => closePopup(popupImageOverview));
 
 function createCardElement(cardObject) {
   const placeTemplate = document.querySelector('#places__place').content;
@@ -84,7 +83,7 @@ function createCardElement(cardObject) {
   placeElement.querySelector('.places__image').src = cardObject.link;
   placeElement.querySelector('.places__image').alt = cardObject.name;
   placeElement.querySelector('.places__image').addEventListener('click', event => {
-    popupImageOverview.classList.add('popup_opened');
+    openPopup(popupImageOverview);
     popupImageOverview.querySelector('.popup__overview-image').src = event.target.src;
     popupImageOverview.querySelector('.popup__overview-image').alt = event.target.alt;
     popupImageOverview.querySelector('.popup__overview-text').textContent = event.target.alt;
