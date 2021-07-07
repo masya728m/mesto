@@ -14,8 +14,14 @@
       <button class="popup__exit-button" type="button"></button>
       <h2 class="popup__title">Редактировать профиль</h2>
       <fieldset class="popup__input-container">
-        <input type="text" name="name" placeholder="Имя" class="popup__field"/>
-        <input type="text" name="job" placeholder="Должность" class="popup__field"/>
+        <div class="popup__field-wrapper">
+          <input type="text" name="name" placeholder="Имя" class="popup__field"/>
+          <p class="popup__field-error"></p>
+        </div>
+        <div class="popup__field-wrapper">
+          <input type="text" name="job" placeholder="Должность" class="popup__field"/>
+          <p class="popup__field-error"></p>
+        </div>
       </fieldset>
       <button type="submit" class="popup__submit-button">Сохранить</button>
     </form>
@@ -27,10 +33,16 @@
       <button class="popup__exit-button" type="button"></button>
       <h2 class="popup__title">Новое место</h2>
       <fieldset class="popup__input-container">
-        <input type="text" name="location-name" placeholder="Название"
-               class="popup__field popup__field_type_place-name"/>
-        <input type="text" name="image-link" placeholder="Ссылка на картинку"
-               class="popup__field popup__field_type_image-link"/>
+        <div class="popup__field-wrapper">
+          <input type="text" name="location-name" placeholder="Название"
+                 class="popup__field popup__field_type_place-name"/>
+          <p class="popup__field-error"></p>
+        </div>
+        <div class="popup__field-wrapper">
+          <input type="text" name="image-link" placeholder="Ссылка на картинку"
+                 class="popup__field popup__field_type_image-link"/>
+          <p class="popup__field-error"></p>
+        </div>
       </fieldset>
       <button type="submit" class="popup__submit-button">Создать</button>
     </form>
