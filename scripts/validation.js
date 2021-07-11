@@ -1,4 +1,4 @@
-let formHandlerMap;
+let formHandlerMap = null;
 
 function searchInArrayWithMap(array, map) {
   return array.find(elem => map.get(elem));
@@ -10,28 +10,44 @@ function formSubmitHandler(evt) {
   formHandlerMap.get(result)();
 }
 
-function displayError(field, errorMessage) {
-
+function clearError(field, fieldErrorModifier, errorClass) {
+  field.classList.remove(fieldErrorModifier);
+  field.parentElement.querySelector(errorClass).textContent = '';
 }
 
-function checkFieldValidity(field) {
-  console.log(field.validity);
-  if (field.validity.valid) return true;
-
-  if (field.validity.valueMissing) {
-    displayError(field, 'Вы пропустили это поле');
-  } else if (field.validity.typeMismatch) {
-    displayError(field, 'Введите адрес сайта');
-  }
-  return false;
+export function displayError(field, fieldErrorModifier, errorClass, errorMessage) {
+  field.classList.add(fieldErrorModifier);
+  field.parentElement.querySelector(errorClass).textContent = errorMessage;
 }
 
-function toggleButtonState(inputList, submitButton, inactiveButtonClass) {
-  if (!inputList.every(input => input.validity.valid)) {
-    submitButton.classList.add(inactiveButtonClass);
+function checkFieldValidity(field, fieldErrorModifier, errorClass) {
+  if (field.validity.valid) {
+    clearError(field, fieldErrorModifier, errorClass);
     return;
   }
-  submitButton.classList.remove(inactiveButtonClass);
+  if (field.validity.valueMissing) {
+    displayError(field, fieldErrorModifier, errorClass, 'Вы пропустили это поле');
+  } else if (field.validity.typeMismatch) {
+    displayError(field, fieldErrorModifier, errorClass, 'Введите адрес сайта');
+  }
+}
+
+export function disableButton(button, inactiveButtonModifier) {
+  button.setAttribute('disabled', 'disabled');
+  button.classList.add(inactiveButtonModifier);
+}
+
+export function enableButton(button, inactiveButtonModifier) {
+  button.removeAttribute('disabled');
+  button.classList.remove(inactiveButtonModifier);
+}
+
+export function toggleButtonState(inputList, submitButton, inactiveButtonClass) {
+  if (!Array.from(inputList).every(input => input.validity.valid)) {
+    disableButton(submitButton, inactiveButtonClass);
+    return;
+  }
+  enableButton(submitButton, inactiveButtonClass);
 }
 
 export function enableValidation(settings, handlerMap) {
@@ -51,16 +67,8 @@ export function enableValidation(settings, handlerMap) {
     const inputList = form.querySelectorAll(inputSelector);
     const submitButton = form.querySelector(submitButtonSelector);
     inputList.forEach(field => field.addEventListener('input', () => {
-      if (!checkFieldValidity(field)) toggleButtonState(inputList, submitButton, inactiveButtonClass);
+      checkFieldValidity(field, inputErrorClass, errorClass);
+      toggleButtonState(inputList, submitButton, inactiveButtonClass);
     }));
-
   });
-
-  const inputElement = document.querySelectorAll(inputSelector);
-
-
-  const submitButtonElement = document.querySelector(submitButtonSelector);
-  const inactiveButtonElement = document.querySelector(inactiveButtonClass);
-  const inputErrorElement = document.querySelector(inputErrorClass);
-  const errorElement = document.querySelector(errorClass);
 }

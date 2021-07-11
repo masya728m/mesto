@@ -1,5 +1,5 @@
 import {initialCards} from './initial-cards.js';
-import {enableValidation} from './validation.js';
+import {enableValidation, displayError, toggleButtonState, disableButton, enableButton} from './validation.js';
 
 const profile = document.querySelector('.profile');
 const popupProfile = document.querySelector('.popup_type_profile');
@@ -19,6 +19,13 @@ const fieldNameMap = {
 
 function closePopup(popupWindow) {
   popupWindow.classList.remove('popup_opened');
+  popupWindow.querySelectorAll('.popup__field').forEach(field => {
+    field.classList.remove('popup__field_type_error');
+  });
+  popupWindow.querySelectorAll('.popup__field-error').forEach(errorField => {
+    errorField.textContent = '';
+  });
+  enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 }
 
 function openPopup(popupWindow) {
@@ -37,10 +44,14 @@ profileEditButton.addEventListener('click', () => {
 });
 
 profileAddButton.addEventListener('click', () => {
-  popupCardAdd.querySelectorAll('.popup__field').forEach(
+  const inputList = Array.from(popupCardAdd.querySelectorAll('.popup__field'));
+  const submitButton = popupCardAdd.querySelector('.popup__submit-button');
+  inputList.forEach(
     field => {
-      field.classList.add('popup__field_inactive');
+      displayError(field, 'popup__field_type_error', '.popup__field-error', 'Вы пропустили это поле');
+      disableButton(submitButton, 'popup__submit-button_disabled');
       field.value = '';
+
     });
   openPopup(popupCardAdd);
 });
@@ -109,8 +120,8 @@ enableValidation({
     formSelector:         '.popup',
     inputSelector:        '.popup__field',
     submitButtonSelector: '.popup__submit-button',
-    inactiveButtonClass:  'popup__submit-button-disabled',
+    inactiveButtonClass:  'popup__submit-button_disabled',
     inputErrorClass:      'popup__field_type_error',
-    errorClass:           'popup__error_visible'
+    errorClass:           '.popup__field-error'
   }, handlerMap
 );
