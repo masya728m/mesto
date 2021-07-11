@@ -1,4 +1,5 @@
 import {initialCards} from './initial-cards.js';
+import {enableValidation} from './validation.js';
 
 const profile = document.querySelector('.profile');
 const popupProfile = document.querySelector('.popup_type_profile');
@@ -8,8 +9,6 @@ const profileAddButton = document.querySelector('.profile__add-button');
 const popupImageOverview = document.querySelector('.popup_type_overview');
 const places = document.querySelector('.places');
 const popupImageOverviewExitButton = popupImageOverview.querySelector('.popup__exit-button');
-const popupCardAddSubmitForm = popupCardAdd.querySelector('.popup__form');
-const popupProfileSubmitForm = popupProfile.querySelector('.popup__form');
 const popupCardAddExitButton = popupCardAdd.querySelector('.popup__exit-button');
 const popupProfileExitButton = popupProfile.querySelector('.popup__exit-button');
 
@@ -27,14 +26,6 @@ function openPopup(popupWindow) {
 }
 
 popupProfileExitButton.addEventListener('click', () => {
-  closePopup(popupProfile);
-});
-
-popupProfileSubmitForm.addEventListener('submit', e => {
-  e.preventDefault();
-  popupProfile.querySelectorAll('.popup__field').forEach(field => {
-    fieldNameMap[field.name].textContent = field.value;
-  });
   closePopup(popupProfile);
 });
 
@@ -60,18 +51,6 @@ popupCardAdd.querySelectorAll('.popup__field').forEach(
   field => field.addEventListener('input', () => {
     field.classList.remove('popup__field_inactive');
   }));
-
-popupCardAddSubmitForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const placeName = popupCardAdd.querySelector('.popup__field_type_place-name').value;
-  const imageLink = popupCardAdd.querySelector('.popup__field_type_image-link').value;
-  const cardElement = createCardElement({
-    name: placeName,
-    link: imageLink
-  });
-  places.prepend(cardElement);
-  closePopup(popupCardAdd);
-});
 
 popupImageOverviewExitButton.addEventListener('click', () => closePopup(popupImageOverview));
 
@@ -107,3 +86,31 @@ function initCards(cards) {
 }
 
 initCards(initialCards);
+
+const handlerMap = new Map;
+handlerMap.set('popup_type_profile', () => {
+  popupProfile.querySelectorAll('.popup__field').forEach(field => {
+    fieldNameMap[field.name].textContent = field.value;
+  });
+  closePopup(popupProfile);
+});
+handlerMap.set('popup_type_card-add', () => {
+  const placeName = popupCardAdd.querySelector('.popup__field_type_place-name').value;
+  const imageLink = popupCardAdd.querySelector('.popup__field_type_image-link').value;
+  const cardElement = createCardElement({
+    name: placeName,
+    link: imageLink
+  });
+  places.prepend(cardElement);
+  closePopup(popupCardAdd);
+});
+
+enableValidation({
+    formSelector:         '.popup',
+    inputSelector:        '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass:  'popup__button_disabled',
+    inputErrorClass:      'popup__input_type_error',
+    errorClass:           'popup__error_visible'
+  }, handlerMap
+);
