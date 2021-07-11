@@ -5,9 +5,10 @@
   height: 50px;
   display: flex;
   justify-content: space-evenly;
+  box-sizing: border-box;
   align-items: center;
   border-radius: 2px;
-  border: 0;
+  border-width: 1px;
   margin: 48px auto 37px;
   width: 100%;
   max-width: 358px;

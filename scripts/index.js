@@ -107,10 +107,10 @@ handlerMap.set('popup_type_card-add', () => {
 
 enableValidation({
     formSelector:         '.popup',
-    inputSelector:        '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass:  'popup__button_disabled',
-    inputErrorClass:      'popup__input_type_error',
+    inputSelector:        '.popup__field',
+    submitButtonSelector: '.popup__submit-button',
+    inactiveButtonClass:  'popup__submit-button-disabled',
+    inputErrorClass:      'popup__field_type_error',
     errorClass:           'popup__error_visible'
   }, handlerMap
 );

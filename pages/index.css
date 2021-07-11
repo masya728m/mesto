@@ -37,13 +37,15 @@
 @import url('../blocks/popup/_opened/popup_opened.css');
 @import url('../blocks/popup/__title/popup__title.css');
 @import url('../blocks/popup/__field/popup__field.css');
-@import url('../blocks/popup/__field-wrapper/popup__field-wrapper.css');
+@import url('../blocks/popup/__field/_type/popup__field_type_error.css');
 @import url('../blocks/popup/__field-error/popup__field-error.css');
+@import url('../blocks/popup/__field-wrapper/popup__field-wrapper.css');
 @import url('../blocks/popup/__field/_inactive/popup__field_inactive.css');
 @import url('../blocks/popup/__form/popup__form.css');
 @import url('../blocks/popup/__container/popup__container.css');
 @import url('../blocks/popup/__input-container/popup__input-container.css');
 @import url('../blocks/popup/__submit-button/popup__submit-button.css');
+@import url('../blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css');
 @import url('../blocks/popup/__exit-button/popup__exit-button.css');
 @import url('../blocks/popup/__overview-conatiner/popup__overview-container.css');
 @import url('../blocks/popup/__overview-image/popup__overview-image.css');
