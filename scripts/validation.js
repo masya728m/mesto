@@ -29,6 +29,12 @@ function checkFieldValidity(field, fieldErrorModifier, errorClass) {
     displayError(field, fieldErrorModifier, errorClass, 'Вы пропустили это поле');
   } else if (field.validity.typeMismatch) {
     displayError(field, fieldErrorModifier, errorClass, 'Введите адрес сайта');
+  } else if (field.validity.tooShort) {
+    displayError(field, fieldErrorModifier, errorClass,
+      `Минимальное количество символов: ${field.getAttribute('minlength')}. Длина текста сейчас: ${field.value.length} символ`);
+  } else if (field.validity.tooLong) {
+    displayError(field, fieldErrorModifier, errorClass,
+      `Максимальное количество символов: ${field.getAttribute('maxlength')}. Длина текста сейчас: ${field.value.length} символ`);
   }
 }
 

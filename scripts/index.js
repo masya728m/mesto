@@ -1,7 +1,8 @@
 import {initialCards} from './initial-cards.js';
-import {enableValidation, displayError, toggleButtonState, disableButton, enableButton} from './validation.js';
+import {disableButton, enableButton, enableValidation} from './validation.js';
 
 const profile = document.querySelector('.profile');
+const popup = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_profile');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupCardAdd = document.querySelector('.popup_type_card-add');
@@ -17,16 +18,41 @@ const fieldNameMap = {
   'job':  profile.querySelector('.profile__description')
 };
 
-function closePopup(popupWindow) {
-  popupWindow.classList.remove('popup_opened');
+function clearErrorFields(popupWindow) {
   popupWindow.querySelectorAll('.popup__field').forEach(field => {
     field.classList.remove('popup__field_type_error');
   });
   popupWindow.querySelectorAll('.popup__field-error').forEach(errorField => {
     errorField.textContent = '';
   });
-  enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 }
+
+function closePopup(popupWindow) {
+  popupWindow.classList.remove('popup_opened');
+}
+
+popup.forEach(item => {
+    item.addEventListener('click', evt => {
+      if (Array.from(evt.target.classList).some(className => className === 'popup')) {
+        closePopup(evt.target);
+        if (Array.from(evt.target.classList).some(className => className === 'popup_type_overview')) return;
+        clearErrorFields(evt.target);
+        enableButton(evt.target.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
+      }
+    });
+  }
+);
+
+window.addEventListener('keydown', evt => {
+  if (evt.key !== 'Escape') return;
+  popup.forEach(popupWindow => {
+    if (!Array.from(popupWindow.classList).some(className => className === 'popup_opened')) return;
+    if (Array.from(evt.target.classList).some(className => className === 'popup_type_overview')) return;
+    closePopup(popupWindow);
+    clearErrorFields(popupWindow);
+    enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
+  })
+});
 
 function openPopup(popupWindow) {
   popupWindow.classList.add('popup_opened');
@@ -34,6 +60,8 @@ function openPopup(popupWindow) {
 
 popupProfileExitButton.addEventListener('click', () => {
   closePopup(popupProfile);
+  clearErrorFields(popupProfile);
+  enableButton(popupProfile.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 
 profileEditButton.addEventListener('click', () => {
@@ -48,7 +76,6 @@ profileAddButton.addEventListener('click', () => {
   const submitButton = popupCardAdd.querySelector('.popup__submit-button');
   inputList.forEach(
     field => {
-      displayError(field, 'popup__field_type_error', '.popup__field-error', 'Вы пропустили это поле');
       disableButton(submitButton, 'popup__submit-button_disabled');
       field.value = '';
 
@@ -56,14 +83,20 @@ profileAddButton.addEventListener('click', () => {
   openPopup(popupCardAdd);
 });
 
-popupCardAddExitButton.addEventListener('click', () => closePopup(popupCardAdd));
+popupCardAddExitButton.addEventListener('click', () => {
+  closePopup(popupCardAdd);
+  clearErrorFields(popupCardAdd);
+  enableButton(popupCardAdd.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
+});
 
 popupCardAdd.querySelectorAll('.popup__field').forEach(
   field => field.addEventListener('input', () => {
     field.classList.remove('popup__field_inactive');
   }));
 
-popupImageOverviewExitButton.addEventListener('click', () => closePopup(popupImageOverview));
+popupImageOverviewExitButton.addEventListener('click', () => {
+  closePopup(popupImageOverview);
+});
 
 function createCardElement(cardObject) {
   const placeTemplate = document.querySelector('#places__place').content;
@@ -104,6 +137,8 @@ handlerMap.set('popup_type_profile', () => {
     fieldNameMap[field.name].textContent = field.value;
   });
   closePopup(popupProfile);
+  clearErrorFields(popupProfile);
+  enableButton(popupProfile.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 handlerMap.set('popup_type_card-add', () => {
   const placeName = popupCardAdd.querySelector('.popup__field_type_place-name').value;
@@ -114,6 +149,8 @@ handlerMap.set('popup_type_card-add', () => {
   });
   places.prepend(cardElement);
   closePopup(popupCardAdd);
+  clearErrorFields(popupCardAdd);
+  enableButton(popupCardAdd.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 
 enableValidation({
