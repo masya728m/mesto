@@ -2,7 +2,7 @@ import {initialCards} from './initial-cards.js';
 import {disableButton, enableButton, enableValidation} from './validation.js';
 
 const profile = document.querySelector('.profile');
-const popup = document.querySelectorAll('.popup');
+const popupList = document.querySelectorAll('.popup');
 const popupProfile = document.querySelector('.popup_type_profile');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupCardAdd = document.querySelector('.popup_type_card-add');
@@ -29,39 +29,34 @@ function clearErrorFields(popupWindow) {
 
 function closePopup(popupWindow) {
   popupWindow.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscapeHandler);
 }
 
-popup.forEach(item => {
+popupList.forEach(item => {
     item.addEventListener('click', evt => {
       if (Array.from(evt.target.classList).some(className => className === 'popup')) {
         closePopup(evt.target);
-        if (Array.from(evt.target.classList).some(className => className === 'popup_type_overview')) return;
-        clearErrorFields(evt.target);
-        enableButton(evt.target.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
       }
     });
   }
 );
 
-window.addEventListener('keydown', evt => {
+function closeByEscapeHandler(evt) {
   if (evt.key !== 'Escape') return;
-  popup.forEach(popupWindow => {
-    if (!Array.from(popupWindow.classList).some(className => className === 'popup_opened')) return;
-    if (Array.from(evt.target.classList).some(className => className === 'popup_type_overview')) return;
-    closePopup(popupWindow);
-    clearErrorFields(popupWindow);
-    enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
-  })
-});
+  const openedPopup = document.querySelector('.popup_opened');
+  closePopup(openedPopup);
+}
 
 function openPopup(popupWindow) {
   popupWindow.classList.add('popup_opened');
+  document.addEventListener('keydown', closeByEscapeHandler);
+  if (Array.from(popupWindow.classList).some(className => className === 'popup_type_overview')) return;
+  clearErrorFields(popupWindow);
+  enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 }
 
 popupProfileExitButton.addEventListener('click', () => {
   closePopup(popupProfile);
-  clearErrorFields(popupProfile);
-  enableButton(popupProfile.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 
 profileEditButton.addEventListener('click', () => {
@@ -72,6 +67,7 @@ profileEditButton.addEventListener('click', () => {
 });
 
 profileAddButton.addEventListener('click', () => {
+  openPopup(popupCardAdd);
   const inputList = Array.from(popupCardAdd.querySelectorAll('.popup__field'));
   const submitButton = popupCardAdd.querySelector('.popup__submit-button');
   inputList.forEach(
@@ -80,13 +76,10 @@ profileAddButton.addEventListener('click', () => {
       field.value = '';
 
     });
-  openPopup(popupCardAdd);
 });
 
 popupCardAddExitButton.addEventListener('click', () => {
   closePopup(popupCardAdd);
-  clearErrorFields(popupCardAdd);
-  enableButton(popupCardAdd.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 
 popupCardAdd.querySelectorAll('.popup__field').forEach(
@@ -131,15 +124,15 @@ function initCards(cards) {
 
 initCards(initialCards);
 
-const handlerMap = new Map;
+const handlerMap = new Map();
+
 handlerMap.set('popup_type_profile', () => {
   popupProfile.querySelectorAll('.popup__field').forEach(field => {
     fieldNameMap[field.name].textContent = field.value;
   });
   closePopup(popupProfile);
-  clearErrorFields(popupProfile);
-  enableButton(popupProfile.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
+
 handlerMap.set('popup_type_card-add', () => {
   const placeName = popupCardAdd.querySelector('.popup__field_type_place-name').value;
   const imageLink = popupCardAdd.querySelector('.popup__field_type_image-link').value;
@@ -149,8 +142,6 @@ handlerMap.set('popup_type_card-add', () => {
   });
   places.prepend(cardElement);
   closePopup(popupCardAdd);
-  clearErrorFields(popupCardAdd);
-  enableButton(popupCardAdd.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 });
 
 enableValidation({
