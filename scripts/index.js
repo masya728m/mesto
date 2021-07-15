@@ -50,9 +50,6 @@ function closeByEscapeHandler(evt) {
 function openPopup(popupWindow) {
   popupWindow.classList.add('popup_opened');
   document.addEventListener('keydown', closeByEscapeHandler);
-  if (Array.from(popupWindow.classList).some(className => className === 'popup_type_overview')) return;
-  clearErrorFields(popupWindow);
-  enableButton(popupWindow.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
 }
 
 popupProfileExitButton.addEventListener('click', () => {
@@ -61,6 +58,8 @@ popupProfileExitButton.addEventListener('click', () => {
 
 profileEditButton.addEventListener('click', () => {
   openPopup(popupProfile);
+  clearErrorFields(popupProfile);
+  enableButton(popupProfile.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
   popupProfile.querySelectorAll('.popup__field').forEach(field => {
     field.value = fieldNameMap[field.name].textContent;
   });
@@ -68,6 +67,8 @@ profileEditButton.addEventListener('click', () => {
 
 profileAddButton.addEventListener('click', () => {
   openPopup(popupCardAdd);
+  clearErrorFields(popupCardAdd);
+  enableButton(popupCardAdd.querySelector('.popup__submit-button'), 'popup__submit-button_disabled');
   const inputList = Array.from(popupCardAdd.querySelectorAll('.popup__field'));
   const submitButton = popupCardAdd.querySelector('.popup__submit-button');
   inputList.forEach(
