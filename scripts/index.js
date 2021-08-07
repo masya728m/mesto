@@ -89,7 +89,6 @@ cardAddForm.onOpen(() => {
   cardAddForm.disableSubmitButton();
   cardAddForm.getInputFields().forEach(field => {
     field.value = '';
-    cardAddForm.checkInputValidity(field);
   });
 });
 
