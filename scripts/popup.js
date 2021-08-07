@@ -13,8 +13,8 @@ export default class Popup {
     this.#_popupOpeningModifier = popupParams.popupOpeningModifier;
     this.#_popupElement = document.querySelector(this.#_popupSelector);
     this.#_closeButtonElement = this.#_popupElement.querySelector(this.#_closeButtonSelector);
-    this.#_setupEventListeners();
     this.#_closeByEscapeHandlerBound = this.#_closeByEscapeHandler.bind(this);
+    this.#_setupEventListeners();
   }
 
   #_setupEventListeners() {
