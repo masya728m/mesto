@@ -1,11 +1,14 @@
 import {initialCards} from './initial-cards.js';
-import Card from './card.js';
-import FormValidator from './form-validator.js';
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
 
 const profile = document.querySelector('.profile');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupCardAdd = document.querySelector('.popup_type_card-add');
+const popupOverview = document.querySelector('.popup_type_overview');
 const places = document.querySelector('.places');
+const profileEditButton = document.querySelector('.profile__edit-button');
+const cardAddButton = document.querySelector('.profile__add-button');
 
 const fieldNameMap = {
   'name': profile.querySelector('.profile__name'),
@@ -24,79 +27,104 @@ const cardSelectorParams = {
   popupImageSelector:   '.popup__overview-image'
 };
 
-const popupCardParams = {
-  popupSelector:        '.popup_type_overview',
-  closeButtonSelector:  '.popup__exit-button',
-  popupOpeningModifier: 'popup_opened'
+const formParams = {
+  popupFieldSelector:          '.popup__field',
+  popupFieldErrorSelector:     '.popup__field-error',
+  popupFieldErrorModifier:     'popup__field_type_error',
+  submitButtonSelector:        '.popup__submit-button',
+  submitButtonDisableModifier: 'popup__submit-button_disabled'
 };
+
+function createCardElement(cardParams, selectorParams) {
+  const cardObj = new Card(cardParams, selectorParams);
+  const cardElement = cardObj.createCardElement();
+  cardElement.querySelector('.places__image').addEventListener('click', evt => {
+    popupOverview.querySelector('.popup__overview-image').src = evt.target.src;
+    popupOverview.querySelector('.popup__overview-image').alt = evt.target.alt;
+    popupOverview.querySelector('.popup__overview-text').textContent = evt.target.alt;
+    openPopup(popupOverview);
+  });
+  return cardElement;
+}
 
 function initCards(cards) {
   cards.forEach(card => {
-    const cardObj = new Card(card, cardSelectorParams, popupCardParams);
-    const cardElement = cardObj.createCardElement();
-    places.append(cardElement);
+    places.append(createCardElement(card, cardSelectorParams));
   });
 }
 
 initCards(initialCards);
 
-const profileForm = new FormValidator(
-  popupProfile,
-  {
-    openButtonSelector:          '.profile__edit-button',
-    popupFieldSelector:          '.popup__field',
-    popupFieldErrorSelector:     '.popup__field-error',
-    popupFieldErrorModifier:     'popup__field_type_error',
-    submitButtonSelector:        '.popup__submit-button',
-    submitButtonDisableModifier: 'popup__submit-button_disabled'
-  }, {
-    popupSelector:        '.popup_type_profile',
-    closeButtonSelector:  '.popup__exit-button',
-    popupOpeningModifier: 'popup_opened'
-  }
-);
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closeByEscapeHandler);
+  document.addEventListener('click', popupBackgroundClickHandler);
+}
 
-profileForm.onOpen(() => {
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeByEscapeHandler);
+  document.removeEventListener('click', popupBackgroundClickHandler);
+}
+
+function closeByEscapeHandler(evt) {
+  if (evt.key !== 'Escape') return;
+  const popup = document.querySelector('.popup_opened');
+  if (!popup) return;
+  closePopup(popup);
+}
+
+function popupBackgroundClickHandler(evt) {
+  if (!evt.target.classList.contains('popup')) return;
+  const popup = document.querySelector('.popup_opened');
+  if (!popup) return;
+  closePopup(popup);
+}
+
+popupProfile.querySelector('.popup__exit-button').addEventListener('click', () => closePopup(popupProfile));
+
+cardAddButton.addEventListener('click', () => openPopup(popupCardAdd));
+popupCardAdd.querySelector('.popup__exit-button').addEventListener('click', () => closePopup(popupCardAdd));
+
+popupOverview.querySelector('.popup__exit-button').addEventListener('click', () => closePopup(popupOverview));
+
+
+const profileForm = new FormValidator(popupProfile, formParams);
+
+profileForm.enableValidation();
+
+profileEditButton.addEventListener('click', () => {
+  openPopup(popupProfile);
   profileForm.enableSubmitButton();
+  profileForm.clearErrorFields();
   profileForm.getInputFields().forEach(field => {
     field.value = fieldNameMap[field.name].textContent;
   });
 });
 
-profileForm.onSubmit(() => {
+popupProfile.addEventListener('submit', evt => {
+  evt.preventDefault();
   profileForm.getInputFields().forEach(field => {
     fieldNameMap[field.name].textContent = field.value;
   });
+  closePopup(popupProfile);
 });
 
-const cardAddForm = new FormValidator(
-  popupCardAdd,
-  {
-    openButtonSelector:          '.profile__add-button',
-    popupFieldSelector:          '.popup__field',
-    popupFieldErrorSelector:     '.popup__field-error',
-    popupFieldErrorModifier:     'popup__field_type_error',
-    submitButtonSelector:        '.popup__submit-button',
-    submitButtonDisableModifier: 'popup__submit-button_disabled'
-  }, {
-    popupSelector:        '.popup_type_card-add',
-    closeButtonSelector:  '.popup__exit-button',
-    popupOpeningModifier: 'popup_opened'
-  }
-);
+const cardAddForm = new FormValidator(popupCardAdd, formParams);
 
-cardAddForm.onOpen(() => {
+cardAddForm.enableValidation();
+
+cardAddButton.addEventListener('click', () => {
   cardAddForm.disableSubmitButton();
-  cardAddForm.getInputFields().forEach(field => {
-    field.value = '';
-  });
+  cardAddForm.clearErrorFields();
+  popupCardAdd.querySelector('.popup__form').reset();
 });
 
-cardAddForm.onSubmit(() => {
+popupCardAdd.addEventListener('submit', evt => {
+  evt.preventDefault();
   const placeName = cardAddForm.getPopupElement().querySelector('.popup__field_type_place-name').value;
   const imageLink = cardAddForm.getPopupElement().querySelector('.popup__field_type_image-link').value;
   const card = {name: placeName, link: imageLink};
-  const cardObj = new Card(card, cardSelectorParams, popupCardParams);
-  const cardElement = cardObj.createCardElement();
-  places.prepend(cardElement);
+  places.prepend(createCardElement(card, cardSelectorParams));
+  closePopup(popupCardAdd);
 });
