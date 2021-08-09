@@ -5,7 +5,7 @@ import FormValidator from './FormValidator.js';
 const profile = document.querySelector('.profile');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupCardAdd = document.querySelector('.popup_type_card-add');
-const popupOverview = document.querySelector('.popup_type_overview');
+export const popupOverview = document.querySelector('.popup_type_overview');
 const places = document.querySelector('.places');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const cardAddButton = document.querySelector('.profile__add-button');
@@ -37,14 +37,7 @@ const formParams = {
 
 function createCardElement(cardParams, selectorParams) {
   const cardObj = new Card(cardParams, selectorParams);
-  const cardElement = cardObj.createCardElement();
-  cardElement.querySelector('.places__image').addEventListener('click', evt => {
-    popupOverview.querySelector('.popup__overview-image').src = evt.target.src;
-    popupOverview.querySelector('.popup__overview-image').alt = evt.target.alt;
-    popupOverview.querySelector('.popup__overview-text').textContent = evt.target.alt;
-    openPopup(popupOverview);
-  });
-  return cardElement;
+  return cardObj.createCardElement();
 }
 
 function initCards(cards) {
@@ -55,7 +48,7 @@ function initCards(cards) {
 
 initCards(initialCards);
 
-function openPopup(popup) {
+export function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closeByEscapeHandler);
   document.addEventListener('click', popupBackgroundClickHandler);
@@ -68,17 +61,17 @@ function closePopup(popup) {
 }
 
 function closeByEscapeHandler(evt) {
-  if (evt.key !== 'Escape') return;
-  const popup = document.querySelector('.popup_opened');
-  if (!popup) return;
-  closePopup(popup);
+  if (evt.key === 'Escape') {
+    const popup = document.querySelector('.popup_opened');
+    closePopup(popup);
+  }
 }
 
 function popupBackgroundClickHandler(evt) {
-  if (!evt.target.classList.contains('popup')) return;
-  const popup = document.querySelector('.popup_opened');
-  if (!popup) return;
-  closePopup(popup);
+  if (evt.target.classList.contains('popup')) {
+    const popup = document.querySelector('.popup_opened');
+    closePopup(popup);
+  }
 }
 
 popupProfile.querySelector('.popup__exit-button').addEventListener('click', () => closePopup(popupProfile));

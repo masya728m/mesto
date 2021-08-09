@@ -78,15 +78,7 @@ export default class FormValidator {
       this.#_clearError(field);
       return;
     }
-    if (field.validity.valueMissing) {
-      this.#_displayError(field, 'Вы пропустили это поле');
-    } else if (field.validity.typeMismatch) {
-      this.#_displayError(field, 'Введите адрес сайта');
-    } else if (field.validity.tooShort) {
-      this.#_displayError(field, `Минимальное количество символов: ${field.getAttribute('minlength')}. Длина текста сейчас: ${field.value.length} символ`);
-    } else if (field.validity.tooLong) {
-      this.#_displayError(field, `Максимальное количество символов: ${field.getAttribute('maxlength')}. Длина текста сейчас: ${field.value.length} символ`);
-    }
+    this.#_displayError(field, field.validationMessage);
   }
 
   clearErrorFields() {
