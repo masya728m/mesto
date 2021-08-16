@@ -1,5 +1,3 @@
-import {openPopup, popupOverview} from './index.js';
-
 export default class Card {
   #_link;
   #_name;
@@ -16,14 +14,12 @@ export default class Card {
   #_likeModifier;
   #_likeButtonElement;
 
-  #_deleteButtonClickHandlerBound;
-
-  #_likeButtonClickHandlerBound;
-
   #_popupTextSelector;
   #_popupImageSelector;
 
-  constructor(cardParams, selectorParams) {
+  #_imageClickHandler;
+
+  constructor(cardParams, selectorParams, imageClickHandler) {
     this.#_link = cardParams.link;
     this.#_name = cardParams.name;
 
@@ -38,8 +34,7 @@ export default class Card {
     this.#_popupImageSelector = selectorParams.popupImageSelector;
     this.#_popupTextSelector = selectorParams.popupTextSelector;
 
-    this.#_deleteButtonClickHandlerBound = this.#_deleteButtonClickHandler.bind(this);
-    this.#_likeButtonClickHandlerBound = this.#_likeButtonClickHandler.bind(this);
+    this.#_imageClickHandler = imageClickHandler;
   }
 
   #_getTemplate() {
@@ -52,15 +47,8 @@ export default class Card {
 
   #_setupEventListeners() {
     this.#_placeElement.querySelector(this.#_cardImageSelector).addEventListener('click', this.#_imageClickHandler);
-    this.#_placeElement.querySelector(this.#_deleteButtonSelector).addEventListener('click', this.#_deleteButtonClickHandlerBound);
-    this.#_likeButtonElement.addEventListener('click', this.#_likeButtonClickHandlerBound);
-  }
-
-  #_imageClickHandler(evt) {
-    popupOverview.querySelector('.popup__overview-image').src = evt.target.src;
-    popupOverview.querySelector('.popup__overview-image').alt = evt.target.alt;
-    popupOverview.querySelector('.popup__overview-text').textContent = evt.target.alt;
-    openPopup(popupOverview);
+    this.#_placeElement.querySelector(this.#_deleteButtonSelector).addEventListener('click', this.#_deleteButtonClickHandler.bind(this));
+    this.#_likeButtonElement.addEventListener('click', this.#_likeButtonClickHandler.bind(this));
   }
 
   #_likeButtonClickHandler(evt) {
