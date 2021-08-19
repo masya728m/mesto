@@ -11,31 +11,37 @@ import PopupWithForm from '../components/PopupWithForm';
 import UserInfo from '../components/UserInfo';
 import FormValidator from '../components/FormValidator';
 
+const imagePopup = new PopupWithImage(
+  {
+    popupSelector:            '.popup_type_overview',
+    popupCloseButtonSelector: '.popup__exit-button',
+    popupImageSelector:       '.popup__overview-image',
+    popupTextSelector:        '.popup__overview-text'
+  }
+);
+
+imagePopup.setEventListeners();
+
 function createCardElement(cardItem) {
   const cardObj = new Card(cardItem, cardSelectorParams, (evt) => {
-    const imagePopup = new PopupWithImage(
-      {
-        popupSelector:            '.popup_type_overview',
-        popupCloseButtonSelector: '.popup__exit-button',
-        popupImageSelector:       '.popup__overview-image',
-        popupTextSelector:        '.popup__overview-text'
-      },
-      {
-        imageLink: evt.target.src,
-        text:      evt.target.alt
-      });
-    imagePopup.setEventListeners();
-    imagePopup.open();
+    imagePopup.open({
+      imageLink: evt.target.src,
+      text:      evt.target.alt
+    });
   });
   return cardObj.createCardElement();
+}
+
+function renderCard(cardItem) {
+  const cardElement = createCardElement(cardItem);
+  placesSection.addItem(cardElement);
 }
 
 const placesSection = new Section(
   {
     items:    initialCards,
     renderer: (cardItem) => {
-      const cardElement = createCardElement(cardItem);
-      placesSection.addItem(cardElement);
+      renderCard(cardItem);
     }
   },
   '.places'
@@ -52,11 +58,10 @@ const cardAddForm = new PopupWithForm(
   },
   {
     submitHandler: ([placeName, placeImageLink]) => {
-      const cardElement = createCardElement({
+      renderCard({
         name: placeName,
         link: placeImageLink
       });
-      placesSection.addItem(cardElement);
       cardAddForm.close();
     }
   }
@@ -84,10 +89,10 @@ const profileEditForm = new PopupWithForm(
     popupCloseButtonSelector: '.popup__exit-button'
   },
   {
-    submitHandler: ([userName, userJob]) => {
+    submitHandler: (userInfoObj) => {
       userInfo.setUserInfo({
-        userName: userName,
-        userInfo: userJob
+        userName: userInfoObj.name,
+        userInfo: userInfoObj.job
       });
       profileEditForm.close();
     }
@@ -97,12 +102,8 @@ profileEditForm.setEventListeners();
 
 profileEditButton.addEventListener('click', () => {
   const userInfoObj = userInfo.getUserInfo();
-  const fields = profileEditForm.getElement().querySelectorAll('.popup__field');
-  console.log(fields);
-  let idx = 0;
-  for (const [, value] of Object.entries(userInfoObj)) {
-    fields[idx++].value = value;
-  }
+  document.getElementById('profile-name').value = userInfoObj.userName;
+  document.getElementById('profile-info').value = userInfoObj.userInfo;
   profileEditFormValidator.enableSubmitButton();
   profileEditForm.open();
 });

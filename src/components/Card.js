@@ -14,9 +14,6 @@ export default class Card {
   #_likeModifier;
   #_likeButtonElement;
 
-  #_popupTextSelector;
-  #_popupImageSelector;
-
   #_imageClickHandler;
 
   constructor(cardParams, selectorParams, imageClickHandler) {
@@ -30,10 +27,6 @@ export default class Card {
     this.#_cardTextSelector = selectorParams.cardTextSelector;
     this.#_likeButtonSelector = selectorParams.likeButtonSelector;
     this.#_likeModifier = selectorParams.likeModifier;
-
-    this.#_popupImageSelector = selectorParams.popupImageSelector;
-    this.#_popupTextSelector = selectorParams.popupTextSelector;
-
     this.#_imageClickHandler = imageClickHandler;
   }
 
@@ -57,6 +50,7 @@ export default class Card {
 
   #_deleteButtonClickHandler() {
     this.#_placeElement.remove();
+    this.#_placeElement = null;
   }
 
   createCardElement() {
