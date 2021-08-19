@@ -105,6 +105,7 @@ profileEditButton.addEventListener('click', () => {
   document.getElementById('profile-name').value = userInfoObj.userName;
   document.getElementById('profile-info').value = userInfoObj.userInfo;
   profileEditFormValidator.enableSubmitButton();
+  profileEditFormValidator.clearErrorFields();
   profileEditForm.open();
 });
 
