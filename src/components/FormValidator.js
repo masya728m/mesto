@@ -82,7 +82,7 @@ export default class FormValidator {
   }
 
   clearErrorFields() {
-    this.getPopupElement().querySelectorAll(this.#_popupFieldSelector).forEach(field => {
+    this.getInputFields().forEach(field => {
       this.#_clearError(field);
     });
   }

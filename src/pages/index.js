@@ -1,7 +1,9 @@
 import './index.css';
 
 import {
-  cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileEditButton
+  cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileEditButton,
+  profileInfoInput,
+  profileNameInput
 } from '../utils/constants.js';
 
 import Section from '../components/Section';
@@ -23,10 +25,10 @@ const imagePopup = new PopupWithImage(
 imagePopup.setEventListeners();
 
 function createCardElement(cardItem) {
-  const cardObj = new Card(cardItem, cardSelectorParams, (evt) => {
+  const cardObj = new Card(cardItem, cardSelectorParams, () => {
     imagePopup.open({
-      imageLink: evt.target.src,
-      text:      evt.target.alt
+      imageLink: cardItem['link'],
+      text:      cardItem['name']
     });
   });
   return cardObj.createCardElement();
@@ -57,10 +59,10 @@ const cardAddForm = new PopupWithForm(
     popupCloseButtonSelector: '.popup__exit-button'
   },
   {
-    submitHandler: ([placeName, placeImageLink]) => {
+    submitHandler: (userInfoObj) => {
       renderCard({
-        name: placeName,
-        link: placeImageLink
+        name: userInfoObj['location-name'],
+        link: userInfoObj['image-link']
       });
       cardAddForm.close();
     }
@@ -102,8 +104,8 @@ profileEditForm.setEventListeners();
 
 profileEditButton.addEventListener('click', () => {
   const userInfoObj = userInfo.getUserInfo();
-  document.getElementById('profile-name').value = userInfoObj.userName;
-  document.getElementById('profile-info').value = userInfoObj.userInfo;
+  profileNameInput.value = userInfoObj.userName;
+  profileInfoInput.value = userInfoObj.userInfo;
   profileEditFormValidator.enableSubmitButton();
   profileEditFormValidator.clearErrorFields();
   profileEditForm.open();
