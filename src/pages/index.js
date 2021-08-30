@@ -2,8 +2,7 @@ import './index.css';
 
 import {
   cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileEditButton,
-  profileInfoInput,
-  profileNameInput
+  profileInfoInput, profileNameInput
 } from '../utils/constants.js';
 
 import Section from '../components/Section';
@@ -12,6 +11,15 @@ import PopupWithImage from '../components/PopupWithImage';
 import PopupWithForm from '../components/PopupWithForm';
 import UserInfo from '../components/UserInfo';
 import FormValidator from '../components/FormValidator';
+import Api from '../components/Api';
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-27',
+  headers: {
+    authorization: '43168655-eaf1-4fdd-a66c-28d363c4ffc3',
+    'ContentType': 'application/json'
+  }
+});
 
 const imagePopup = new PopupWithImage(
   {
@@ -30,6 +38,8 @@ function createCardElement(cardItem) {
       imageLink: cardItem['link'],
       text:      cardItem['name']
     });
+  }, ({owner, _id}) => {
+
   });
   return cardObj.createCardElement();
 }
@@ -111,4 +121,12 @@ profileEditButton.addEventListener('click', () => {
   profileEditForm.open();
 });
 
-placesSection.render();
+api.getUserInfo().then(info => {
+  console.log(info);
+  userInfo.setUserInfo({userName: info.name, userInfo: info.about});
+});
+
+api.getInitialCards().then(cards => {
+  placesSection.setItems(cards);
+  placesSection.render();
+});

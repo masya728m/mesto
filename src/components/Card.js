@@ -16,7 +16,13 @@ export default class Card {
 
   #_imageClickHandler;
 
-  constructor(cardParams, selectorParams, imageClickHandler) {
+  #_likes;
+  #_owner;
+  #_id;
+
+  #_deleteHandler;
+
+  constructor(cardParams, selectorParams, imageClickHandler, deleteHandler) {
     this.#_link = cardParams.link;
     this.#_name = cardParams.name;
 
@@ -28,6 +34,10 @@ export default class Card {
     this.#_likeButtonSelector = selectorParams.likeButtonSelector;
     this.#_likeModifier = selectorParams.likeModifier;
     this.#_imageClickHandler = imageClickHandler;
+    this.#_likes = cardParams.likes;
+    this.#_owner = cardParams.owner;
+    this.#_id = cardParams._id;
+    this.#_deleteHandler = deleteHandler;
   }
 
   #_getTemplate() {
@@ -51,6 +61,10 @@ export default class Card {
   #_deleteButtonClickHandler() {
     this.#_placeElement.remove();
     this.#_placeElement = null;
+    this.#_deleteHandler?.({
+      owner: this.#_owner,
+      _id:   this.#_id
+    });
   }
 
   createCardElement() {
