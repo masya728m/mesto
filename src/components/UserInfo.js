@@ -3,6 +3,7 @@ export default class UserInfo {
   #_userInfoSelector;
   #_userNameElement;
   #_userInfoElement;
+  #_id;
 
   constructor({userNameSelector, userInfoSelector}) {
     this.#_userNameSelector = userNameSelector;
@@ -21,5 +22,13 @@ export default class UserInfo {
   setUserInfo({userName, userInfo}) {
     this.#_userNameElement.textContent = userName;
     this.#_userInfoElement.textContent = userInfo;
+  }
+
+  setUserId(id) {
+    this.#_id = id;
+  }
+
+  getUserId() {
+    return this.#_id;
   }
 }

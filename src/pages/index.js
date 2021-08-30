@@ -38,8 +38,10 @@ function createCardElement(cardItem) {
       imageLink: cardItem['link'],
       text:      cardItem['name']
     });
-  }, ({owner, _id}) => {
-
+  }, ({ownerId}) => {
+    console.log(ownerId);
+  }, (ownerId) => {
+    console.log(ownerId);
   });
   return cardObj.createCardElement();
 }
@@ -52,9 +54,7 @@ function renderCard(cardItem) {
 const placesSection = new Section(
   {
     items:    initialCards,
-    renderer: (cardItem) => {
-      renderCard(cardItem);
-    }
+    renderer: renderCard
   },
   '.places'
 );
@@ -124,6 +124,7 @@ profileEditButton.addEventListener('click', () => {
 api.getUserInfo().then(info => {
   console.log(info);
   userInfo.setUserInfo({userName: info.name, userInfo: info.about});
+  userInfo.setUserId(info._id);
 });
 
 api.getInitialCards().then(cards => {
