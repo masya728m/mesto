@@ -38,16 +38,19 @@ function createCardElement(cardItem) {
       imageLink: cardItem['link'],
       text:      cardItem['name']
     });
-  }, ({ownerId}) => {
-    console.log(ownerId);
-  }, (ownerId) => {
-    console.log(ownerId);
+  }, ({cardId}) => {
+    api.deleteCard(cardId);
+  }, ({cardId, isLiked}) => {
+    api.likeCard(isLiked, cardId);
   });
   return cardObj.createCardElement();
 }
 
 function renderCard(cardItem) {
   const cardElement = createCardElement(cardItem);
+  if (cardItem.owner._id !== userInfo.getUserId()) {
+    cardElement.querySelector(cardSelectorParams.deleteButtonSelector).style.display = 'none';
+  }
   placesSection.addItem(cardElement);
 }
 
@@ -122,12 +125,10 @@ profileEditButton.addEventListener('click', () => {
 });
 
 api.getUserInfo().then(info => {
-  console.log(info);
   userInfo.setUserInfo({userName: info.name, userInfo: info.about});
   userInfo.setUserId(info._id);
-});
-
-api.getInitialCards().then(cards => {
-  placesSection.setItems(cards);
-  placesSection.render();
+  api.getInitialCards().then(cards => {
+    placesSection.setItems(cards);
+    placesSection.render();
+  });
 });

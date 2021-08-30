@@ -19,7 +19,7 @@ export default class Card {
 
   #_likes;
   #_owner;
-  #_id;
+  #_cardId;
 
   #_deleteHandler;
   #_likeHandler;
@@ -39,7 +39,7 @@ export default class Card {
     this.#_imageClickHandler = imageClickHandler;
     this.#_likes = cardParams.likes.length;
     this.#_owner = cardParams.owner;
-    this.#_id = cardParams._id;
+    this.#_cardId = cardParams._id;
     this.#_deleteHandler = deleteHandler;
     this.#_likeHandler = likeHandler;
   }
@@ -68,17 +68,13 @@ export default class Card {
       this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = this.#_likes;
     else
       this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = '';
-    this.#_likeHandler?.({
-      ownerId: this.#_id
-    });
+    this.#_likeHandler?.({cardId: this.#_cardId, isLiked: evt.target.classList.contains(this.#_likeModifier)});
   }
 
   #_deleteButtonClickHandler() {
     this.#_placeElement.remove();
     this.#_placeElement = null;
-    this.#_deleteHandler?.({
-      ownerId: this.#_id
-    });
+    this.#_deleteHandler?.({cardId: this.#_cardId});
   }
 
   createCardElement() {
