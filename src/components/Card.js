@@ -11,6 +11,7 @@ export default class Card {
   #_deleteButtonSelector;
 
   #_likeButtonSelector;
+  #_likeCounterSelector;
   #_likeModifier;
   #_likeButtonElement;
 
@@ -33,9 +34,10 @@ export default class Card {
     this.#_cardImageSelector = selectorParams.cardImageSelector;
     this.#_cardTextSelector = selectorParams.cardTextSelector;
     this.#_likeButtonSelector = selectorParams.likeButtonSelector;
+    this.#_likeCounterSelector = selectorParams.likeCounterSelector;
     this.#_likeModifier = selectorParams.likeModifier;
     this.#_imageClickHandler = imageClickHandler;
-    this.#_likes = cardParams.likes;
+    this.#_likes = cardParams.likes.length;
     this.#_owner = cardParams.owner;
     this.#_id = cardParams._id;
     this.#_deleteHandler = deleteHandler;
@@ -58,8 +60,16 @@ export default class Card {
 
   #_likeButtonClickHandler(evt) {
     evt.target.classList.toggle(this.#_likeModifier);
+    if (evt.target.classList.contains(this.#_likeModifier))
+      this.#_likes++;
+    else
+      this.#_likes--;
+    if (this.#_likes)
+      this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = this.#_likes;
+    else
+      this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = '';
     this.#_likeHandler?.({
-      ownerId:   this.#_id
+      ownerId: this.#_id
     });
   }
 
@@ -67,7 +77,7 @@ export default class Card {
     this.#_placeElement.remove();
     this.#_placeElement = null;
     this.#_deleteHandler?.({
-      ownerId:   this.#_id
+      ownerId: this.#_id
     });
   }
 
@@ -76,6 +86,8 @@ export default class Card {
     this.#_placeElement.querySelector(this.#_cardImageSelector).src = this.#_link;
     this.#_placeElement.querySelector(this.#_cardImageSelector).alt = this.#_name;
     this.#_placeElement.querySelector(this.#_cardTextSelector).textContent = this.#_name;
+    if (this.#_likes)
+      this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = this.#_likes;
 
     this.#_likeButtonElement = this.#_placeElement.querySelector(this.#_likeButtonSelector);
 

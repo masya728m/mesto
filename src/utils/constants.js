@@ -57,7 +57,8 @@ export const cardSelectorParams = {
   likeButtonSelector:   '.places__like-button',
   likeModifier:         'places__like-button_liked',
   popupTextSelector:    '.popup__overview-text',
-  popupImageSelector:   '.popup__overview-image'
+  popupImageSelector:   '.popup__overview-image',
+  likeCounterSelector:  '.places__like-counter'
 };
 
 export const formParams = {
