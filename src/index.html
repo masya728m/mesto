@@ -60,7 +60,10 @@
 </header>
 <main class="content">
   <section class="profile">
-    <img class="profile__avatar" src="<%=require('./images/zhak.jpg')%>" alt="avatar"/>
+    <div class="profile__avatar-container">
+      <img class="profile__avatar" src="<%=require('./images/zhak.jpg')%>" alt="avatar"/>
+      <button class="profile__avatar-button" type="button"></button>
+    </div>
     <div class="profile__info">
       <h1 class="profile__name"></h1>
       <button class="profile__edit-button" type="button"></button>
