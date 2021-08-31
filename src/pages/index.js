@@ -1,7 +1,8 @@
 import './index.css';
 
 import {
-  cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileEditButton,
+  cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileAvatar,
+  profileEditButton,
   profileInfoInput, profileNameInput
 } from '../utils/constants.js';
 
@@ -111,11 +112,18 @@ const profileEditForm = new PopupWithForm(
   },
   {
     submitHandler: (userInfoObj) => {
-      userInfo.setUserInfo({
-        userName: userInfoObj.name,
-        userInfo: userInfoObj.job
+      api.setUserInfo({
+        name:  userInfoObj.name,
+        about: userInfoObj.job
+      }).then(res => {
+        userInfo.setUserInfo({
+          userName: res.name,
+          userInfo: res.about
+        });
+        profileAvatar.src = res.avatar;
+        profileAvatar.alt = res.name;
+        profileEditForm.close();
       });
-      profileEditForm.close();
     }
   }
 );
@@ -132,9 +140,11 @@ profileEditButton.addEventListener('click', () => {
 
 api.getUserInfo().then(info => {
   userInfo.setUserInfo({userName: info.name, userInfo: info.about});
+  profileAvatar.src = info.avatar;
+  profileAvatar.alt = info.name;
   userInfo.setUserId(info._id);
   api.getInitialCards().then(cards => {
-    placesSection.setItems(cards);
+    placesSection.setItems(cards.reverse());
     placesSection.render();
   });
 });

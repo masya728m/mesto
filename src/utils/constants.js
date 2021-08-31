@@ -41,6 +41,7 @@ export const profileEditButton = document.querySelector('.profile__edit-button')
 export const cardAddButton = document.querySelector('.profile__add-button');
 export const profileNameInput = document.getElementById('profile-name');
 export const profileInfoInput = document.getElementById('profile-info');
+export const profileAvatar = profile.querySelector('.profile__avatar');
 
 
 export const fieldNameMap = {
