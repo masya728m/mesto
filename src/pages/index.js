@@ -16,8 +16,8 @@ import Api from '../components/Api';
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-27',
   headers: {
-    authorization: '43168655-eaf1-4fdd-a66c-28d363c4ffc3',
-    'ContentType': 'application/json'
+    authorization:  '43168655-eaf1-4fdd-a66c-28d363c4ffc3',
+    'Content-Type': 'application/json'
   }
 });
 
@@ -51,6 +51,9 @@ function renderCard(cardItem) {
   if (cardItem.owner._id !== userInfo.getUserId()) {
     cardElement.querySelector(cardSelectorParams.deleteButtonSelector).style.display = 'none';
   }
+  if (cardItem.likes.some(like => like._id === userInfo.getUserId())) {
+    cardElement.querySelector(cardSelectorParams.likeButtonSelector).classList.add(cardSelectorParams.likeModifier);
+  }
   placesSection.addItem(cardElement);
 }
 
@@ -73,11 +76,14 @@ const cardAddForm = new PopupWithForm(
   },
   {
     submitHandler: (userInfoObj) => {
-      renderCard({
+      const cardInfo = {
         name: userInfoObj['location-name'],
         link: userInfoObj['image-link']
+      };
+      api.addCard(cardInfo).then(res => {
+        renderCard(res);
+        cardAddForm.close();
       });
-      cardAddForm.close();
     }
   }
 );

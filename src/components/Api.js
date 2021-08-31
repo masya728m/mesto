@@ -57,7 +57,7 @@ export default class Api {
     init.method = method;
     init.headers = this.#_headers;
     if (body)
-      init.body = body;
+      init.body = JSON.stringify(body);
     return fetch(this.#_baseUrl + path, init);
   }
 
