@@ -34,6 +34,7 @@ export const initialCards = [
 
 export const profile = document.querySelector('.profile');
 export const popupProfile = document.querySelector('.popup_type_profile');
+export const popupAvatar = document.querySelector('.popup_type_avatar');
 export const popupCardAdd = document.querySelector('.popup_type_card-add');
 export const popupOverview = document.querySelector('.popup_type_overview');
 export const places = document.querySelector('.places');
@@ -42,6 +43,7 @@ export const cardAddButton = document.querySelector('.profile__add-button');
 export const profileNameInput = document.getElementById('profile-name');
 export const profileInfoInput = document.getElementById('profile-info');
 export const profileAvatar = profile.querySelector('.profile__avatar');
+export const avatarEditButton = profile.querySelector('.profile__avatar-button');
 
 
 export const fieldNameMap = {

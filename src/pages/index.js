@@ -1,9 +1,8 @@
 import './index.css';
 
 import {
-  cardAddButton, cardSelectorParams, formParams, initialCards, popupCardAdd, popupProfile, profileAvatar,
-  profileEditButton,
-  profileInfoInput, profileNameInput
+  avatarEditButton, cardAddButton, cardSelectorParams, formParams, initialCards, popupAvatar, popupCardAdd,
+  popupProfile, profileAvatar, profileEditButton, profileInfoInput, profileNameInput
 } from '../utils/constants.js';
 
 import Section from '../components/Section';
@@ -147,4 +146,30 @@ api.getUserInfo().then(info => {
     placesSection.setItems(cards.reverse());
     placesSection.render();
   });
+});
+
+const avatarEditFormValidator = new FormValidator(popupAvatar, formParams);
+avatarEditFormValidator.enableValidation();
+
+const popupEditAvatarForm = new PopupWithForm(
+  {
+    popupSelector:            '.popup_type_avatar',
+    popupCloseButtonSelector: '.popup__exit-button'
+  },
+  {
+    submitHandler: (avatar) => {
+      api.updateProfileImage(avatar.link).then(res => {
+        console.log(res);
+        profileAvatar.src = avatar.link;
+        popupEditAvatarForm.close();
+      });
+    }
+  }
+);
+popupEditAvatarForm.setEventListeners();
+
+avatarEditButton.addEventListener('click', () => {
+  avatarEditFormValidator.disableSubmitButton();
+  avatarEditFormValidator.clearErrorFields();
+  popupEditAvatarForm.open();
 });
