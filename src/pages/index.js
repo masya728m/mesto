@@ -12,6 +12,7 @@ import PopupWithForm from '../components/PopupWithForm';
 import UserInfo from '../components/UserInfo';
 import FormValidator from '../components/FormValidator';
 import Api from '../components/Api';
+import PopupWithConfirm from '../components/PopupWithConfirm';
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-27',
@@ -30,6 +31,24 @@ const imagePopup = new PopupWithImage(
   }
 );
 
+const deleteConfirmPopup = new PopupWithConfirm(
+  {
+    popupSelector:            '.popup_type_confirmation-dialog',
+    popupCloseButtonSelector: '.popup__exit-button'
+  },
+  {
+    submitHandler: () => {
+      const {cardObj, cardId} = deleteConfirmPopup.getConfirmationData();
+      api.deleteCard(cardId).then(() => {
+        cardObj.deleteCard();
+        deleteConfirmPopup.close();
+      });
+    }
+  }
+);
+
+deleteConfirmPopup.setEventListeners();
+
 imagePopup.setEventListeners();
 
 function createCardElement(cardItem) {
@@ -39,9 +58,8 @@ function createCardElement(cardItem) {
       text:      cardItem['name']
     });
   }, ({cardId}) => {
-    api.deleteCard(cardId).then(res => {
-      cardObj.deleteCard();
-    });
+    deleteConfirmPopup.setConfirmationData({cardObj, cardId});
+    deleteConfirmPopup.open();
   }, ({cardId, isLiked}) => {
     api.likeCard(isLiked, cardId).then(res => {
       cardObj.setLike(isLiked);
