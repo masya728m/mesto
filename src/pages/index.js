@@ -39,9 +39,13 @@ function createCardElement(cardItem) {
       text:      cardItem['name']
     });
   }, ({cardId}) => {
-    api.deleteCard(cardId);
+    api.deleteCard(cardId).then(res => {
+      cardObj.deleteCard();
+    });
   }, ({cardId, isLiked}) => {
-    api.likeCard(isLiked, cardId);
+    api.likeCard(isLiked, cardId).then(res => {
+      cardObj.setLike(isLiked);
+    });
   });
   return cardObj.createCardElement();
 }

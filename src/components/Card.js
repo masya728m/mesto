@@ -59,22 +59,28 @@ export default class Card {
   }
 
   #_likeButtonClickHandler(evt) {
-    evt.target.classList.toggle(this.#_likeModifier);
-    if (evt.target.classList.contains(this.#_likeModifier))
+    this.#_likeHandler?.({cardId: this.#_cardId, isLiked: !evt.target.classList.contains(this.#_likeModifier)});
+  }
+
+  setLike(liked) {
+    if (liked) {
+      this.#_likeButtonElement.classList.add(this.#_likeModifier);
       this.#_likes++;
-    else
-      this.#_likes--;
-    if (this.#_likes)
-      this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = this.#_likes;
-    else
-      this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = '';
-    this.#_likeHandler?.({cardId: this.#_cardId, isLiked: evt.target.classList.contains(this.#_likeModifier)});
+    } else {
+      this.#_likeButtonElement.classList.remove(this.#_likeModifier);
+      if (this.#_likes > 0)
+        this.#_likes--;
+    }
+    this.#_placeElement.querySelector(this.#_likeCounterSelector).textContent = (this.#_likes > 0) ? this.#_likes : '';
   }
 
   #_deleteButtonClickHandler() {
+    this.#_deleteHandler?.({cardId: this.#_cardId});
+  }
+
+  deleteCard() {
     this.#_placeElement.remove();
     this.#_placeElement = null;
-    this.#_deleteHandler?.({cardId: this.#_cardId});
   }
 
   createCardElement() {
