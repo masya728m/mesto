@@ -1,7 +1,8 @@
 import './index.css';
 
 import {
-  avatarEditButton, cardAddButton, cardSelectorParams, formParams, initialCards, popupAvatar, popupCardAdd,
+  avatarEditButton, cardAddButton, cardSelectorParams, errorDescription, formParams, initialCards, popupAvatar,
+  popupCardAdd,
   popupProfile, profileAvatar, profileEditButton, profileInfoInput, profileNameInput
 } from '../utils/constants.js';
 
@@ -13,6 +14,7 @@ import UserInfo from '../components/UserInfo';
 import FormValidator from '../components/FormValidator';
 import Api from '../components/Api';
 import PopupWithConfirm from '../components/PopupWithConfirm';
+import Popup from '../components/Popup';
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-27',
@@ -42,6 +44,10 @@ const deleteConfirmPopup = new PopupWithConfirm(
       api.deleteCard(cardId).then(() => {
         cardObj.deleteCard();
         deleteConfirmPopup.close();
+      }).catch(err => {
+        deleteConfirmPopup.close();
+        errorPopup.open();
+        errorDescription.textContent = `Error deleting card: ${err}`;
       });
     }
   }
@@ -62,7 +68,11 @@ function createCardElement(cardItem) {
     deleteConfirmPopup.open();
   }, ({cardId, isLiked}) => {
     api.likeCard(isLiked, cardId).then(res => {
+      console.log(res);
       cardObj.setLike(isLiked);
+    }).catch(err => {
+      errorPopup.open();
+      errorDescription.textContent = `Failed to ${isLiked ? 'set' : 'unset'} like: ${err}`;
     });
   });
   return cardObj.createCardElement();
@@ -102,9 +112,16 @@ const cardAddForm = new PopupWithForm(
         name: userInfoObj['location-name'],
         link: userInfoObj['image-link']
       };
+      const savedText = cardAddForm.getElement().querySelector('.popup__submit-button').textContent;
+      cardAddForm.getElement().querySelector('.popup__submit-button').textContent = 'Сохранение...';
       api.addCard(cardInfo).then(res => {
         renderCard(res);
+        cardAddForm.getElement().querySelector('.popup__submit-button').textContent = savedText;
         cardAddForm.close();
+      }).catch(err => {
+        cardAddForm.close();
+        errorPopup.open();
+        errorDescription.textContent = `Failed to add card: ${err}`;
       });
     }
   }
@@ -133,10 +150,13 @@ const profileEditForm = new PopupWithForm(
   },
   {
     submitHandler: (userInfoObj) => {
+      const savedText = profileEditForm.getElement().querySelector('.popup__submit-button').textContent;
+      profileEditForm.getElement().querySelector('.popup__submit-button').textContent = 'Сохранение...';
       api.setUserInfo({
         name:  userInfoObj.name,
         about: userInfoObj.job
       }).then(res => {
+        profileEditForm.getElement().querySelector('.popup__submit-button').textContent = savedText;
         userInfo.setUserInfo({
           userName: res.name,
           userInfo: res.about
@@ -144,6 +164,10 @@ const profileEditForm = new PopupWithForm(
         profileAvatar.src = res.avatar;
         profileAvatar.alt = res.name;
         profileEditForm.close();
+      }).catch(err => {
+        profileEditForm.close();
+        errorPopup.open();
+        errorDescription.textContent = `Failed to set user info: ${err}`;
       });
     }
   }
@@ -159,6 +183,13 @@ profileEditButton.addEventListener('click', () => {
   profileEditForm.open();
 });
 
+const errorPopup = new Popup({
+  popupSelector: '.popup_type_error',
+  exitButtonSelector: '.popup__exit-button'
+});
+
+errorPopup.setEventListeners();
+
 api.getUserInfo().then(info => {
   userInfo.setUserInfo({userName: info.name, userInfo: info.about});
   profileAvatar.src = info.avatar;
@@ -167,7 +198,13 @@ api.getUserInfo().then(info => {
   api.getInitialCards().then(cards => {
     placesSection.setItems(cards.reverse());
     placesSection.render();
+  }).catch(err => {
+    errorPopup.open();
+    errorDescription.textContent = `Error getting initial cards: ${err}`;
   });
+}).catch(err => {
+  errorPopup.open();
+  errorDescription.textContent = `Error getting user info: ${err}`;
 });
 
 const avatarEditFormValidator = new FormValidator(popupAvatar, formParams);
@@ -184,6 +221,10 @@ const popupEditAvatarForm = new PopupWithForm(
         console.log(res);
         profileAvatar.src = avatar.link;
         popupEditAvatarForm.close();
+      }).catch(err => {
+        popupEditAvatarForm.close();
+        errorPopup.open();
+        errorDescription.textContent = `Error updating profile image: ${err}`;
       });
     }
   }

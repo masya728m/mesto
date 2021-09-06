@@ -8,48 +8,41 @@ export default class Api {
   }
 
   getUserInfo() {
-    return this.#_request('GET', '/users/me')
-      .then(res => res.json());
+    return this.#_request('GET', '/users/me');
   }
 
   getInitialCards() {
-    return this.#_request('GET', '/cards')
-      .then(res => res.json())
-      .catch(err => err);
+    return this.#_request('GET', '/cards');
   }
 
   setUserInfo({name, about}) {
     return this.#_request('PATCH', '/users/me', {
       name:  name,
       about: about
-    })
-      .then(res => res.json());
+    });
   }
 
   addCard({name, link}) {
     return this.#_request('POST', '/cards', {
       name: name,
       link: link
-    }).then(res => res.json());
+    });
   }
 
   deleteCard(cardId) {
-    return this.#_request('DELETE', '/cards/' + cardId)
-      .then(res => res.json());
+    return this.#_request('DELETE', '/cards/' + cardId);
   }
 
   likeCard(like, cardId) {
     const method = like ? 'PUT' : 'DELETE';
-    return this.#_request(method, '/cards/likes/' + cardId)
-      .then(res => res.json());
+    return this.#_request(method, '/cards/likes/' + cardId);
   }
 
 
   updateProfileImage(imageLink) {
     return this.#_request('PATCH', '/users/me/avatar', {
       avatar: imageLink
-    })
-      .then(res => res.json());
+    });
   }
 
   #_request(method, path, body) {
@@ -58,7 +51,10 @@ export default class Api {
     init.headers = this.#_headers;
     if (body)
       init.body = JSON.stringify(body);
-    return fetch(this.#_baseUrl + path, init);
+    return fetch(this.#_baseUrl + path, init)
+      .catch(err => Promise.reject(`Connection error: ${err}`))
+      .then(res => res.json())
+      .catch(err => Promise.reject(`Data error ${err}`));
   }
 
 }

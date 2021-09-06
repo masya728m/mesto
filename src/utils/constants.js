@@ -44,6 +44,7 @@ export const profileNameInput = document.getElementById('profile-name');
 export const profileInfoInput = document.getElementById('profile-info');
 export const profileAvatar = profile.querySelector('.profile__avatar');
 export const avatarEditButton = profile.querySelector('.profile__avatar-button');
+export const errorDescription = document.getElementById('error-description');
 
 
 export const fieldNameMap = {
