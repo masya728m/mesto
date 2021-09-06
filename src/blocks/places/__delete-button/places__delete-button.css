@@ -11,6 +11,7 @@
   background-position: center;
   background-color: transparent;
   cursor: pointer;
+  mix-blend-mode: difference;
 }
 
 .places__delete-button:hover {
