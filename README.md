@@ -13,4 +13,4 @@
 3. события в js
 
 Ссылка на github pages:
-https://masya728m.github.io/mesto/index.html
+https://masya728m.github.io/mesto/
