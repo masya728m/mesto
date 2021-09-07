@@ -2,8 +2,7 @@ import './index.css';
 
 import {
   avatarEditButton, cardAddButton, cardSelectorParams, errorDescription, formParams, initialCards, popupAvatar,
-  popupCardAdd,
-  popupProfile, profileAvatar, profileEditButton, profileInfoInput, profileNameInput
+  popupCardAdd, popupProfile, profileAvatar, profileEditButton, profileInfoInput, profileNameInput
 } from '../utils/constants.js';
 
 import Section from '../components/Section';
@@ -58,34 +57,33 @@ deleteConfirmPopup.setEventListeners();
 imagePopup.setEventListeners();
 
 function createCardElement(cardItem) {
-  const cardObj = new Card(cardItem, cardSelectorParams, () => {
-    imagePopup.open({
-      imageLink: cardItem['link'],
-      text:      cardItem['name']
+  const cardObj = new Card(
+    cardItem,
+    cardSelectorParams,
+    cardItem.owner._id === userInfo.getUserId(),
+    cardItem.likes.some(like => like._id === userInfo.getUserId()),
+    () => {
+      imagePopup.open({
+        imageLink: cardItem['link'],
+        text:      cardItem['name']
+      });
+    }, ({cardId}) => {
+      deleteConfirmPopup.setConfirmationData({cardObj, cardId});
+      deleteConfirmPopup.open();
+    }, ({cardId, isLiked}) => {
+      api.likeCard(isLiked, cardId).then(res => {
+        console.log(res);
+        cardObj.setLike(isLiked);
+      }).catch(err => {
+        errorPopup.open();
+        errorDescription.textContent = `Failed to ${isLiked ? 'set' : 'unset'} like: ${err}`;
+      });
     });
-  }, ({cardId}) => {
-    deleteConfirmPopup.setConfirmationData({cardObj, cardId});
-    deleteConfirmPopup.open();
-  }, ({cardId, isLiked}) => {
-    api.likeCard(isLiked, cardId).then(res => {
-      console.log(res);
-      cardObj.setLike(isLiked);
-    }).catch(err => {
-      errorPopup.open();
-      errorDescription.textContent = `Failed to ${isLiked ? 'set' : 'unset'} like: ${err}`;
-    });
-  });
   return cardObj.createCardElement();
 }
 
 function renderCard(cardItem) {
   const cardElement = createCardElement(cardItem);
-  if (cardItem.owner._id !== userInfo.getUserId()) {
-    cardElement.querySelector(cardSelectorParams.deleteButtonSelector).style.display = 'none';
-  }
-  if (cardItem.likes.some(like => like._id === userInfo.getUserId())) {
-    cardElement.querySelector(cardSelectorParams.likeButtonSelector).classList.add(cardSelectorParams.likeModifier);
-  }
   placesSection.addItem(cardElement);
 }
 
@@ -184,28 +182,11 @@ profileEditButton.addEventListener('click', () => {
 });
 
 const errorPopup = new Popup({
-  popupSelector: '.popup_type_error',
+  popupSelector:      '.popup_type_error',
   exitButtonSelector: '.popup__exit-button'
 });
 
 errorPopup.setEventListeners();
-
-api.getUserInfo().then(info => {
-  userInfo.setUserInfo({userName: info.name, userInfo: info.about});
-  profileAvatar.src = info.avatar;
-  profileAvatar.alt = info.name;
-  userInfo.setUserId(info._id);
-  api.getInitialCards().then(cards => {
-    placesSection.setItems(cards.reverse());
-    placesSection.render();
-  }).catch(err => {
-    errorPopup.open();
-    errorDescription.textContent = `Error getting initial cards: ${err}`;
-  });
-}).catch(err => {
-  errorPopup.open();
-  errorDescription.textContent = `Error getting user info: ${err}`;
-});
 
 const avatarEditFormValidator = new FormValidator(popupAvatar, formParams);
 avatarEditFormValidator.enableValidation();
@@ -236,3 +217,17 @@ avatarEditButton.addEventListener('click', () => {
   avatarEditFormValidator.clearErrorFields();
   popupEditAvatarForm.open();
 });
+
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([info, cards]) => {
+    userInfo.setUserInfo({userName: info.name, userInfo: info.about});
+    profileAvatar.src = info.avatar;
+    profileAvatar.alt = info.name;
+    userInfo.setUserId(info._id);
+    placesSection.setItems(cards.reverse());
+    placesSection.render();
+  })
+  .catch(err => {
+    errorPopup.open();
+    errorDescription.textContent = `Error initializing page: ${err}`;
+  });

@@ -24,7 +24,10 @@ export default class Card {
   #_deleteHandler;
   #_likeHandler;
 
-  constructor(cardParams, selectorParams, imageClickHandler, deleteHandler, likeHandler) {
+  #_showDeleteButton;
+  #_setLike;
+
+  constructor(cardParams, selectorParams, showDeleteButton, setLike, imageClickHandler, deleteHandler, likeHandler) {
     this.#_link = cardParams.link;
     this.#_name = cardParams.name;
 
@@ -42,6 +45,8 @@ export default class Card {
     this.#_cardId = cardParams._id;
     this.#_deleteHandler = deleteHandler;
     this.#_likeHandler = likeHandler;
+    this.#_showDeleteButton = showDeleteButton;
+    this.#_setLike = setLike;
   }
 
   #_getTemplate() {
@@ -94,6 +99,13 @@ export default class Card {
     this.#_likeButtonElement = this.#_placeElement.querySelector(this.#_likeButtonSelector);
 
     this.#_setupEventListeners();
+
+    if (!this.#_showDeleteButton)
+      this.#_placeElement.querySelector(this.#_deleteButtonSelector).style.display = 'none';
+
+    if (this.#_setLike)
+      this.#_placeElement.querySelector(this.#_likeButtonSelector).classList.add(this.#_likeModifier);
+
     return this.#_placeElement;
   }
 }
